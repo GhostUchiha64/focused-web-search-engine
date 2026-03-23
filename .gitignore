@@ -1,0 +1,21 @@
+# ============================================
+# SECURITY - Never commit these files
+# ============================================
+
+# Real database credentials
+db.php
+
+# PHP backup files (created by editors)
+*.php~
+*.bak
+
+# ============================================
+# General
+# ============================================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+.env
+.env.local

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Focused Web Search Engine – DATA 525</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:      #0F0F1A;
+    --card:    #16213E;
+    --border:  #2a2a4a;
+    --primary: #4A9EFF;
+    --green:   #27AE60;
+    --purple:  #8E44AD;
+    --orange:  #E67E22;
+    --text:    #E0E0E0;
+    --muted:   #AAA;
+  }
+  body { font-family: "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    padding: 40px 32px; border-bottom: 2px solid var(--primary); text-align: center;
+  }
+  header h1 { color: var(--primary); font-size: 2em; margin-bottom: 8px; }
+  header p  { color: var(--muted); font-size: 0.95em; }
+  .badge {
+    display: inline-block; background: var(--card); border: 1px solid var(--border);
+    color: var(--primary); padding: 5px 14px; border-radius: 20px;
+    font-size: 0.82em; margin: 6px 4px;
+  }
+
+  .container { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
+
+  /* Pipeline */
+  .pipeline { display: flex; gap: 0; margin: 32px 0; flex-wrap: wrap; }
+  .step {
+    flex: 1; min-width: 180px; background: var(--card); border: 1px solid var(--border);
+    padding: 22px 18px; text-align: center; position: relative;
+  }
+  .step:not(:last-child)::after {
+    content: "→"; position: absolute; right: -14px; top: 50%;
+    transform: translateY(-50%); color: var(--primary); font-size: 1.4em; z-index: 1;
+  }
+  .step:first-child { border-radius: 10px 0 0 10px; }
+  .step:last-child  { border-radius: 0 10px 10px 0; }
+  .step .icon { font-size: 2em; margin-bottom: 8px; }
+  .step h3 { color: var(--primary); font-size: 1em; margin-bottom: 6px; }
+  .step p  { color: var(--muted); font-size: 0.82em; line-height: 1.5; }
+
+  /* Cards */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; margin: 32px 0; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px;
+    transition: transform .2s, border-color .2s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--primary); }
+  .card .icon { font-size: 1.6em; margin-bottom: 10px; }
+  .card h3 { color: #fff; font-size: 1em; margin-bottom: 7px; }
+  .card p  { color: var(--muted); font-size: 0.84em; line-height: 1.5; }
+
+  /* Schema */
+  .schema { display: flex; gap: 16px; flex-wrap: wrap; margin: 24px 0; }
+  .table-box {
+    background: #050510; border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px; flex: 1; min-width: 200px;
+  }
+  .table-box h4 { color: var(--primary); margin-bottom: 10px; font-size: 0.9em; }
+  .table-box ul { list-style: none; }
+  .table-box li { color: #a8ff78; font-size: 0.82em; font-family: monospace; padding: 2px 0; }
+  .table-box li.pk { color: #f1c40f; }
+  .table-box li.fk { color: #e74c3c; }
+
+  /* Code */
+  pre {
+    background: #050510; border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px; overflow-x: auto;
+    font-size: 0.82em; color: #a8ff78; line-height: 1.6;
+  }
+
+  /* Tech stack */
+  .stack { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .tag {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 0.83em;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-block; padding: 11px 24px; border-radius: 8px;
+    font-weight: 600; font-size: 0.92em; transition: opacity .2s; margin: 6px 4px;
+  }
+  .btn:hover { opacity: .83; text-decoration: none; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-ghost   { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+
+  h2 { color: #fff; font-size: 1.25em; margin: 36px 0 14px; border-left: 3px solid var(--primary); padding-left: 12px; }
+
+  footer { text-align: center; padding: 24px; color: #444; margin-top: 50px; border-top: 1px solid #1a1a2e; font-size: 0.83em; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Focused Web Search Engine</h1>
+  <p>DATA 525 – Exercise I &nbsp;|&nbsp; University of North Dakota &nbsp;|&nbsp; Siddartha Bandi</p>
+  <div style="margin-top:16px">
+    <span class="badge">PHP 8</span>
+    <span class="badge">MySQL</span>
+    <span class="badge">BFS / DFS Crawler</span>
+    <span class="badge">TF-ranked Search</span>
+    <span class="badge">Azure DB</span>
+  </div>
+  <div style="margin-top:20px">
+    <a class="btn btn-primary" href="http://undcemcs02.und.edu/~siddartha.bandi/525/1/" target="_blank">Live Demo</a>
+    <a class="btn btn-ghost" href="https://github.com/GhostUchiha64/focused-web-search-engine" target="_blank">View on GitHub</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <h2>How It Works</h2>
+  <div class="pipeline">
+    <div class="step">
+      <div class="icon">🌐</div>
+      <h3>Seed URL</h3>
+      <p>User provides a starting URL and max page limit (up to 500)</p>
+    </div>
+    <div class="step">
+      <div class="icon">🕷️</div>
+      <h3>Crawl</h3>
+      <p>Spider fetches pages via cURL using BFS or DFS, stays within URL prefix</p>
+    </div>
+    <div class="step">
+      <div class="icon">📝</div>
+      <h3>Index</h3>
+      <p>Extracts titles, meta tags, links. Tokenizes terms with stopword removal</p>
+    </div>
+    <div class="step">
+      <div class="icon">🗄️</div>
+      <h3>Store</h3>
+      <p>Saves pages and terms to MySQL via PDO with SSL on Azure</p>
+    </div>
+    <div class="step">
+      <div class="icon">🔍</div>
+      <h3>Search</h3>
+      <p>Keyword query ranked by number of title term hits descending</p>
+    </div>
+  </div>
+
+  <h2>Features</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="icon">🕷️</div>
+      <h3>Focused Crawler</h3>
+      <p>Stays within the URL prefix. Ignores images, PDFs, binaries, and fragments automatically.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔀</div>
+      <h3>BFS &amp; DFS Modes</h3>
+      <p>Switch between breadth-first (SplQueue) and depth-first (SplStack) traversal strategies.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🧹</div>
+      <h3>Stopword Removal</h3>
+      <p>Common English words filtered before indexing for cleaner, more relevant results.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🏆</div>
+      <h3>Ranked Results</h3>
+      <p>Search results ordered by keyword hit count — most relevant pages appear first.</p>
+    </div>
+    <div class="card">
+      <div class="icon">⏱️</div>
+      <h3>Politeness Delay</h3>
+      <p>Configurable millisecond delay between requests to avoid hammering target servers.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🛡️</div>
+      <h3>Secure DB Connection</h3>
+      <p>PDO with SSL to Azure MySQL. Preflight TCP check before every connection attempt.</p>
+    </div>
+  </div>
+
+  <h2>Database Schema</h2>
+  <div class="schema">
+    <div class="table-box">
+      <h4>pages</h4>
+      <ul>
+        <li class="pk">id (PK)</li>
+        <li>url (UNIQUE)</li>
+        <li>title</li>
+        <li>meta_keywords</li>
+        <li>meta_description</li>
+        <li>crawled_at</li>
+      </ul>
+    </div>
+    <div class="table-box">
+      <h4>terms</h4>
+      <ul>
+        <li class="pk">id (PK)</li>
+        <li>term (UNIQUE)</li>
+      </ul>
+    </div>
+    <div class="table-box">
+      <h4>page_terms</h4>
+      <ul>
+        <li class="pk">page_id (PK, FK)</li>
+        <li class="pk">term_id (PK, FK)</li>
+        <li class="fk">→ pages.id</li>
+        <li class="fk">→ terms.id</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Tech Stack</h2>
+  <div class="stack">
+    <span class="tag">PHP 8</span>
+    <span class="tag">cURL</span>
+    <span class="tag">DOMDocument / XPath</span>
+    <span class="tag">PDO (MySQL)</span>
+    <span class="tag">Azure MySQL</span>
+    <span class="tag">SplQueue / SplStack</span>
+    <span class="tag">Apache</span>
+    <span class="tag">CSS3</span>
+  </div>
+
+  <h2>Sample Search Query</h2>
+<pre>
+# Search for pages matching "api auth pagination"
+GET /search.php?q=api+auth+pagination
+
+# Results ranked by hit count:
+1. "API Authentication Guide"   — 3 hits
+2. "Pagination Best Practices"  — 2 hits
+3. "REST API Overview"          — 1 hit
+</pre>
+
+  <h2>Author</h2>
+  <p style="color:var(--muted);line-height:1.8">
+    <strong style="color:#fff">Siddartha Bandi</strong><br>
+    University of North Dakota — DATA 525<br>
+    GitHub: <a href="https://github.com/GhostUchiha64">@GhostUchiha64</a>
+  </p>
+
+</div>
+
+<footer>DATA 525 Exercise I &nbsp;|&nbsp; Focused Web Search Engine &nbsp;|&nbsp; Siddartha Bandi</footer>
+
+</body>
+</html>
