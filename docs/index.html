@@ -126,27 +126,27 @@
   <h2>How It Works</h2>
   <div class="pipeline">
     <div class="step">
-      <div class="icon">🌐</div>
+      <div class="icon"></div>
       <h3>Seed URL</h3>
       <p>User provides a starting URL and max page limit (up to 500)</p>
     </div>
     <div class="step">
-      <div class="icon">🕷️</div>
+      <div class="icon"></div>
       <h3>Crawl</h3>
       <p>Spider fetches pages via cURL using BFS or DFS, stays within URL prefix</p>
     </div>
     <div class="step">
-      <div class="icon">📝</div>
+      <div class="icon"></div>
       <h3>Index</h3>
       <p>Extracts titles, meta tags, links. Tokenizes terms with stopword removal</p>
     </div>
     <div class="step">
-      <div class="icon">🗄️</div>
+      <div class="icon"></div>
       <h3>Store</h3>
       <p>Saves pages and terms to MySQL via PDO with SSL on Azure</p>
     </div>
     <div class="step">
-      <div class="icon">🔍</div>
+      <div class="icon"></div>
       <h3>Search</h3>
       <p>Keyword query ranked by number of title term hits descending</p>
     </div>
@@ -155,32 +155,32 @@
   <h2>Features</h2>
   <div class="cards">
     <div class="card">
-      <div class="icon">🕷️</div>
+      <div class="icon"></div>
       <h3>Focused Crawler</h3>
       <p>Stays within the URL prefix. Ignores images, PDFs, binaries, and fragments automatically.</p>
     </div>
     <div class="card">
-      <div class="icon">🔀</div>
+      <div class="icon"></div>
       <h3>BFS &amp; DFS Modes</h3>
       <p>Switch between breadth-first (SplQueue) and depth-first (SplStack) traversal strategies.</p>
     </div>
     <div class="card">
-      <div class="icon">🧹</div>
+      <div class="icon"></div>
       <h3>Stopword Removal</h3>
       <p>Common English words filtered before indexing for cleaner, more relevant results.</p>
     </div>
     <div class="card">
-      <div class="icon">🏆</div>
+      <div class="icon"></div>
       <h3>Ranked Results</h3>
       <p>Search results ordered by keyword hit count — most relevant pages appear first.</p>
     </div>
     <div class="card">
-      <div class="icon">⏱️</div>
+      <div class="icon"></div>
       <h3>Politeness Delay</h3>
       <p>Configurable millisecond delay between requests to avoid hammering target servers.</p>
     </div>
     <div class="card">
-      <div class="icon">🛡️</div>
+      <div class="icon"></div>
       <h3>Secure DB Connection</h3>
       <p>PDO with SSL to Azure MySQL. Preflight TCP check before every connection attempt.</p>
     </div>
